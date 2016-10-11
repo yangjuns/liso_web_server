@@ -6,6 +6,8 @@
  *
  * Our sever has a limit of 10 pipeliend requests.
  * Return a list of all the requests in order, which needs to be freed after using it.
+ *
+ * NOTE: if one of the pipeliend is invalid, we just give one response saying 400
  */
 Request ** parse(char * buffer, int size, int socketFd, int* num)
 {
@@ -99,8 +101,11 @@ Request ** parse(char * buffer, int size, int socketFd, int* num)
               }
           }
       }else{
-        /* Malformed Request */
-        all_requests[index] = NULL;
+        /* We found a Malformed Request, just treat all the pipedline as one
+         * malformed request */
+        all_requests[0] = NULL;
+        *num = 1;
+        return all_requests;
       }
       index++;
     }

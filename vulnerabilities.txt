@@ -1,2 +1,13 @@
-1.BUF_SIZE         81920   /* NOTE: WE assuming it can hold 10 pipelined requests*/
-2.memory leak
+1. The sever is design to support at most 10 pipelined requests. And it assumes
+   that the request doesn't contain POST request. If a post request is in the
+   pipelined requests, although the server detects it but the buffer might not
+   be large enough to hold the request.
+
+2. If the client sends pipelined requests and one of them is bad request. The
+   server will generate separate responses. The number of responses is equal to
+   the number of requests the parse thinks it is. But if the client sends a GET
+   request, with request body(which is a bad request). The parse will thinks it
+   is one good request followed by one bad request. So it will generate two
+   responses instead of just one 400 response.
+
+3. Memory leak.  

@@ -1,0 +1,19 @@
+Testing methods.
+
+1. Start the sever use web browsers to visit sites. Both using HTTP and HTTPS.
+   I normally use chrome. So I would open F12, and under networks label, I would
+   read the responses Chrome received.
+
+2. I read my log file to test any logical bugs. I record the steps when any
+   fd's get read, written or closed, to see if anything happened out of order.
+
+3. I run a client sock and sent sample requests and print what the sever gives
+   back.
+   Things like:
+    GET /images/abc.png HTTP/1.1
+    Host: www.cs.cmu.edu
+    Connection: keep-alive
+    Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+    User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.99 Safari/537.36
+    Accept-Encoding: gzip, deflate, sdch
+    Accept-Language: en-US,en;q=0.8

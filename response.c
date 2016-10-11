@@ -195,10 +195,10 @@ int provide_data(int client_sock){
     }else{
       char buff[8192];
       memset(buff, 0, 8192);
-      int fd = open(response->file_url, O_RDONLY);  //error handling
+      int fd = open(response->file_url, O_RDONLY);
       if(fd < 0) return -1;
       lseek(fd, status->offset, SEEK_SET);
-      int readret = read(fd, buff, 8192); //error handling
+      int readret = read(fd, buff, 8192);
       if(readret < 0) return -1;
       if(comb_write(client_sock, (void *)buff, readret) < 0) return -1;
       LOG_PRINT("write to client %d : %s", client_sock, buff);
