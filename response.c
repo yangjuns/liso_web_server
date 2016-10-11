@@ -24,7 +24,7 @@
 Response*respond_GET(Request * request, int client_sock);
 Response* respond_HEAD(Request * request, int client_sock);
 Response* respond_POST(Request * request, int client_sock);
-Response* error_response(char * status, char * info);
+Response* error_response(char * status, char * info, int client_sock);
 char* build_default_headers(Request * request);
 char* build_additional_headers(int fd, char* mime, char* mtime);
 char* build_status_line(char* version, char * status, char * text);
@@ -46,11 +46,11 @@ Response ** respond(Request ** requests, int num, int client_sock){
       FD_SET(client_sock, &client_close_list);
     }
     if(requests[i] == NULL){
-      responses[i] = error_response("400", "Bad Request");
+      responses[i] = error_response("400", "Bad Request", client_sock);
       continue;
     }
     if(strcmp(requests[i]->http_version, "HTTP/1.1")!=0){
-      responses[i] = error_response("503", "HTTP_VERSION_NOT_SUPPORTED");
+      responses[i] = error_response("503", "HTTP_VERSION_NOT_SUPPORTED", client_sock);
       continue;
     }
 
@@ -67,7 +67,7 @@ Response ** respond(Request ** requests, int num, int client_sock){
       continue;
     }
     LOG_PRINT("woops, the meathod is not implemented");
-    responses[i] = error_response("501", "Not Implemented");
+    responses[i] = error_response("501", "Not Implemented", client_sock);
   }
   return responses;
 }
@@ -103,7 +103,7 @@ Response *respond_GET(Request * request, int client_sock){
       free(response);
       free(file_url);
       free(result);
-      return error_response("404", "Not Found");
+      return error_response("404", "Not Found", client_sock);
   }
 
   response->file_url = file_url;
@@ -137,7 +137,7 @@ Response* respond_HEAD(Request * request, int client_sock){
  */
 Response* respond_POST(Request * request, int client_sock){
   if(atoi(get_header_value(request,"Content-Length"))<0){
-    return error_response("400", "Bad Request");
+    return error_response("400", "Bad Request", client_sock);
   }
   if((strstr(request->http_uri, "/cgi"))){
     /* CGI */
@@ -153,7 +153,10 @@ Response* respond_POST(Request * request, int client_sock){
 }
 
 /* Both Response and msg need to be freed */
-Response * error_response(char * status, char * info){
+Response * error_response(char * status, char * info, int client_sock){
+  /* If there is an error, we want to close connection after we serving the client*/
+  FD_SET(client_sock, &client_close_list);
+
   LOG_PRINT("NOW it's an error, need to send error response");
   Response * response = malloc(sizeof(Response));
   char* msg = (char *)malloc(8192);

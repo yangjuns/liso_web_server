@@ -63,7 +63,7 @@ int main(int argc, char * argv[]){
     LOCK_FILE = "lock.txt";
     LOG_FILE = "log.txt";
     WWW_FOLDER = "./www";
-    CGI_SCRIPT_PATH = "./CGI/cgi_script.py";
+    CGI_SCRIPT_PATH = "./cgi/cgi_script.py";
     PRIVATE_KEY_FILE = "./private/yangjuns.key";
     CERTIFICATE_FILE = "./certs/yangjuns.crt";
 
@@ -155,10 +155,11 @@ int main(int argc, char * argv[]){
                           if(comb_write(cgi_to_client[i], buf, readret) < 0){
                             LOG_PRINT("Failed writing cgi respones back to client.");
                           }
-                          //LOG_PRINT("CGI let me write : %s", buf);
+                          LOG_PRINT("CGI let me write : %s", buf);
                       }
                       if (readret == 0){
-                          LOG_PRINT("Finished serving client %d. Closing connected", cgi_to_client[i]);
+                          LOG_PRINT("Finished reading from CGI %d", i);
+                          LOG_PRINT("Finished serving client %d. Closing connection", cgi_to_client[i]);
                           clean_up_cgi(i);
                           clean_up_client(cgi_to_client[i]);
                       }else{
