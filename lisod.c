@@ -155,7 +155,7 @@ int main(int argc, char * argv[]){
                           if(comb_write(cgi_to_client[i], buf, readret) < 0){
                             LOG_PRINT("Failed writing cgi respones back to client.");
                           }
-                          LOG_PRINT("CGI let me write : %s", buf);
+                          //LOG_PRINT("CGI let me write : %s", buf);
                       }
                       if (readret == 0){
                           LOG_PRINT("Finished serving client %d. Closing connected", cgi_to_client[i]);

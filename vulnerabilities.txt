@@ -1,0 +1,2 @@
+1.BUF_SIZE         81920   /* NOTE: WE assuming it can hold 10 pipelined requests*/
+2.memory leak
