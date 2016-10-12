@@ -1,10 +1,10 @@
-default: liso_server echo_client
+default: liso_server example_client
 
 liso_server: lisod.c response.c
 	@gcc lisod.c logger.c y.tab.o lex.yy.o parse.c response.c daemonize.c https_socket_comb.c get_CGI_response.c -std=gnu99 -o lisod -lssl -Wall
 
-echo_client: echo_client.c
-	@gcc echo_client.c -o echo_client -Wall -Werror
+example_client: example_client.c
+	@gcc example_client.c -o example_client -Wall -Werror
 
 clean:
-	@rm lisod echo_client
+	@rm lisod example_client

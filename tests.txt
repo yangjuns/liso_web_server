@@ -7,13 +7,22 @@ Testing methods.
 2. I read my log file to test any logical bugs. I record the steps when any
    fd's get read, written or closed, to see if anything happened out of order.
 
-3. I run a client sock and sent sample requests and print what the sever gives
-   back.
-   Things like:
-    GET /images/abc.png HTTP/1.1
-    Host: www.cs.cmu.edu
-    Connection: keep-alive
-    Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
-    User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.99 Safari/537.36
-    Accept-Encoding: gzip, deflate, sdch
-    Accept-Language: en-US,en;q=0.8
+3. using test scripts in scripts/
+
+    example_client.c: This is used to act like a client. It reads requests
+        from request text files and sent it to the sever and print the response
+        from the sever. Some requests ask for large files like png files to test
+        server's ability to send large files over the net.
+
+    cgi_script.py: This is used to act like a cgi. When the sever receives
+        requests that involve cgi, I first try this script to see if the server
+        calls cgi correctls.
+
+    ssl_script.py: This file is used to test ssl request. It sends normal
+        requests but over SSL connection to test HTTPS requests.
+
+
+
+
+
+
